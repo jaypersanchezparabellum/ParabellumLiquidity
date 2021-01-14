@@ -3,8 +3,8 @@ var fs = require('fs')
 const BigNumber = require('bignumber.js');
 const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 
-const erc20contractJSON = fs.readFileSync('ERC20.json')
-const parabellumcontractJSON = fs.readFileSync('Parabellum_Uniswap_In_V1.json')
+const erc20contractJSON = fs.readFileSync('./ERC20.json')
+const parabellumcontractJSON = fs.readFileSync('./Parabellum_Uniswap_In_V1.json')
 const erc20ABI = JSON.parse(erc20contractJSON);
 const parabellumABI = JSON.parse(parabellumcontractJSON)
 
@@ -12,7 +12,7 @@ const parabellumABI = JSON.parse(parabellumcontractJSON)
 const parabellumAddress = "0xD3cF4e98e1e432B3d6Ae42AE406A78F2AC8293D0";
 const parabellumContract = new web3.eth.Contract(parabellumABI, parabellumAddress);
 //fromToken is the wallet address where the ether must be coming from to add to the Uniswap liquidity
-const fromToken = '0x0'
+const fromToken = '0xFFcf8FDEE72ac11b5c542428B35EEF5769C409f0'
 const daiToken = new web3.eth.Contract(erc20ABI, fromToken);
 
 /**
@@ -40,9 +40,10 @@ const daiToken = new web3.eth.Contract(erc20ABI, fromToken);
     //data holder from call on line 1104 in Parabellum_Uniswap_In_V1
     const swapData = 0;
 
-    async function addToLiquid(fromToken, toToken, amount) {
+    async function addToLiquid() {
+        let result
         try {
-            quote = await parabellumContract.methods.ZapIn(
+            result = await parabellumContract.methods.ZapIn(
                 FromTokenContractAddress,
                 pairAddress,
                 amount,
@@ -51,8 +52,10 @@ const daiToken = new web3.eth.Contract(erc20ABI, fromToken);
                 swapTarget,
                 swapData
             ).call();
+            console.log(result);
         } catch (error) {
             console.log('Unable to add', error)
         }
     }
 
+addToLiquid();
