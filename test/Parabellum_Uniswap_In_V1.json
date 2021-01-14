@@ -1,0 +1,296 @@
+{
+	"compiler": {
+		"version": "0.5.17+commit.d19bba13"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint16",
+						"name": "_goodwill",
+						"type": "uint16"
+					}
+				],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_FromTokenContractAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_pairAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_minPoolTokens",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_allowanceTarget",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_swapTarget",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes",
+						"name": "swapData",
+						"type": "bytes"
+					}
+				],
+				"name": "ZapIn",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": true,
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "_owner",
+				"outputs": [
+					{
+						"internalType": "address payable",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "goodwill",
+				"outputs": [
+					{
+						"internalType": "uint16",
+						"name": "",
+						"type": "uint16"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "_TokenAddress",
+						"type": "address"
+					}
+				],
+				"name": "inCaseTokengetsStuck",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "isOwner",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [],
+				"name": "renounceOwnership",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "uint16",
+						"name": "_new_goodwill",
+						"type": "uint16"
+					}
+				],
+				"name": "set_new_goodwill",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "stopped",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [],
+				"name": "toggleContractActive",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address payable",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [],
+				"name": "withdraw",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"methods": {
+				"ZapIn(address,address,uint256,uint256,address,address,bytes)": {
+					"params": {
+						"_FromTokenContractAddress": "The ERC20 token used for investment (address(0x00) if ether)",
+						"_allowanceTarget": "Spender for the first swap",
+						"_amount": "The amount of fromToken to invest",
+						"_minPoolTokens": "Reverts if less tokens received than this",
+						"_pairAddress": "The Uniswap pair address",
+						"_swapTarget": "Excecution target for the first swap",
+						"swapData": "DEX quote data"
+					},
+					"return": "Amount of LP bought"
+				},
+				"isOwner()": {
+					"details": "Returns true if the caller is the current owner."
+				},
+				"owner()": {
+					"details": "Returns the address of the current owner."
+				},
+				"renounceOwnership()": {
+					"details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.      * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+				},
+				"transferOwnership(address)": {
+					"details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+				}
+			}
+		},
+		"userdoc": {
+			"methods": {
+				"ZapIn(address,address,uint256,uint256,address,address,bytes)": {
+					"notice": "This function is used to invest in given Uniswap V2 pair through ETH/ERC20 Tokens"
+				}
+			}
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"browser/Parabellum_Uniswap_In_V1.sol": "Parabellum_Uniswap_In_V1"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"browser/Parabellum_Uniswap_In_V1.sol": {
+			"keccak256": "0x0c258c79002f34d1423100d2b84f294fceefb0f1b6d5d3db0cfc68e105c591a3",
+			"urls": [
+				"bzz-raw://afef3a7abad1725e64eb73ea37f83b1243554ca7adb2bc7aa69a5f3ad2c5510a",
+				"dweb:/ipfs/QmTsVMvButSVqGPWALxoqmnR572NK2KCCok2xnSdt7PiUx"
+			]
+		}
+	},
+	"version": 1
+}
