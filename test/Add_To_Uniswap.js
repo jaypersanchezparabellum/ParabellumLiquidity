@@ -3,8 +3,8 @@ var fs = require('fs')
 const BigNumber = require('bignumber.js');
 const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 
-const erc20contractJSON = fs.readFileSync('./ERC20.json')
-const parabellumcontractJSON = fs.readFileSync('./Parabellum_Uniswap_In_V1.json')
+const erc20contractJSON = fs.readFileSync('ERC20.json')
+const parabellumcontractJSON = fs.readFileSync('Parabellum_Uniswap_In_V1.json')
 const erc20ABI = JSON.parse(erc20contractJSON);
 const parabellumABI = JSON.parse(parabellumcontractJSON)
 
