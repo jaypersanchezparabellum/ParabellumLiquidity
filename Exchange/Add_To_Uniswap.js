@@ -26,19 +26,23 @@ const daiToken = new web3.eth.Contract(erc20ABI, fromToken);
     @param swapData DEX quote data
     @return Amount of LP bought
      */
-    //test with ether
-    const FromTokenContractAddress = '0x00';
-    //wallet address where eth will be coming from.  Taken from Etherscan Mainnet
+    //test with ether that is the ETH address
+    const FromTokenContractAddress = '0x0000000000000000000000000000000000000000';
+    /*
+    * The pair address is the target liquid pool contract address.  In this case
+    * I am adding 0.05 of my ETH into Uniswap V2 USDC/ETH pair
+    */
     const pairAddress = '0xe41d2489571d322189246dafa5ebde1f4699f498'
-    const amount = 0.1;
-    //set the slippage tolerance
-    const minPoolTokens = 1.50;
-    //allow slippage allowance.  due to prices changing constantly, the price might change in while transaction is being set
-    const allowanceTarget = 0.05
-    //is this the target contract that will hold the liquidity?  In this case contract address of Uniswap In?
-    const _swapTarget = '0xD3cF4e98e1e432B3d6Ae42AE406A78F2AC8293D0'
+    //this is the amount of ETH that is being added.  This is should probably be converted from Eth to Wei
+    const amount = 50000000000000000;
+    //this is the slippage tolerance which is in percent but is converted into uint256
+    const minPoolTokens = 634999265606;
+    //this is the exchange contract target returned by Zapper and it happens to be 0x: Exchange Proxy contract target
+    const allowanceTarget = '0xDef1C0ded9bec7F1a1670819833240f027b25EfF'
+    //for whatever reason, this happens to be the same as the allowanceTarget
+    const swapTarget = '0xDef1C0ded9bec7F1a1670819833240f027b25EfF'
     //data holder from call on line 1104 in Parabellum_Uniswap_In_V1
-    const swapData = 0;
+    const swapData = '0x0';
 
     async function addToLiquid() {
         let result
