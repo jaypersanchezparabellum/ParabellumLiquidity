@@ -67,7 +67,7 @@ const daiToken = new web3.eth.Contract(erc20ABI, fromToken);
 
 const myContract = new web3.eth.Contract(parabellumABI,parabellumAddress);
 const tx = {
-    from: '0xB5A7b7658c8daA57AE9F538C0315d4fa44Fe0bE4',
+    from: '0xf584F8728B874a6a5c7A8d4d387C9aae9172D621',
     to: pairAddress,
     value:amount,
     gasLimit:web3.utils.toHex(6000000),
@@ -81,11 +81,11 @@ const tx = {
                 swapData
     ).encodeABI()
 }
-const signPromise = web3.eth.accounts.signTransaction(tx, '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d')
+const signPromise = web3.eth.accounts.signTransaction(tx, '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d') //privatekey
 signPromise.then((signedTx => {
     const sentTx = web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction);
     sentTx.on("receipt", receipt => {
-        console.log(`receipt ${receipt}`)
+        console.log(`receipt ${receipt.LPBought} :: ${receipt.goodwillPortion}`)
     });
 
     sentTx.on("error", err => {
