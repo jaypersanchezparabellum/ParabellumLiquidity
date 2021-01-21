@@ -1,10 +1,31 @@
-/*
-* Originally from UniswapV2_ZapIn_General_V3_0_1
-* Contract Address: 0xD3cF4e98e1e432B3d6Ae42AE406A78F2AC8293D0
-* This contract adds liquidity to Uniswap V2 pools using ETH or any ERC20 Token.
+/**
+ *Submitted for verification at Etherscan.io on 2020-10-12
 */
 
-pragma solidity ^0.5.5;
+// ███████╗░█████╗░██████╗░██████╗░███████╗██████╗░░░░███████╗██╗
+// ╚════██║██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗░░░██╔════╝██║
+// ░░███╔═╝███████║██████╔╝██████╔╝█████╗░░██████╔╝░░░█████╗░░██║
+// ██╔══╝░░██╔══██║██╔═══╝░██╔═══╝░██╔══╝░░██╔══██╗░░░██╔══╝░░██║
+// ███████╗██║░░██║██║░░░░░██║░░░░░███████╗██║░░██║██╗██║░░░░░██║
+// ╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚═╝░░░░░╚══════╝╚═╝░░╚═╝╚═╝╚═╝░░░░░╚═╝
+// Copyright (C) 2020 zapper, nodar, suhail, seb, sumit, apoorv
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+
+///@author Zapper
+///@notice This contract adds liquidity to Uniswap V2 pools using ETH or any ERC20 Token.
+// SPDX-License-Identifier: GPLv2
+
+pragma solidity ^0.5.0;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP. Does not include
@@ -878,7 +899,7 @@ interface IUniswapV2Pair {
         );
 }
 
-contract Parabellum_Uniswap_In_V1 is ReentrancyGuard, Ownable {
+contract Parabellum_ZapIn_General_V2_4_1 is ReentrancyGuard, Ownable {
     using SafeMath for uint256;
     using Address for address;
     using SafeERC20 for IERC20;
@@ -888,16 +909,15 @@ contract Parabellum_Uniswap_In_V1 is ReentrancyGuard, Ownable {
     address
         private constant zgoodwillAddress = 0xE737b6AfEC2320f616297e59445b60a11e3eF75F;
 
+    IUniswapV2Router02 private constant uniswapRouter = IUniswapV2Router02(
+        0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
+    );
+
     IUniswapV2Factory
         private constant UniSwapV2FactoryAddress = IUniswapV2Factory(
         0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f
     );
 
-    IUniswapV2Router02 private constant uniswapRouter = IUniswapV2Router02(
-        0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
-    );
-
-    /wethTokenAddress is Wrapped Ether 
     address
         private constant wethTokenAddress = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
 
@@ -920,23 +940,20 @@ contract Parabellum_Uniswap_In_V1 is ReentrancyGuard, Ownable {
     /**
     @notice This function is used to invest in given Uniswap V2 pair through ETH/ERC20 Tokens
     @param _FromTokenContractAddress The ERC20 token used for investment (address(0x00) if ether)
-    @param _pairAddress The Uniswap pair address
+    @param _ToUnipoolToken0 The Uniswap V2 pair token0 address
+    @param _ToUnipoolToken1 The Uniswap V2 pair token1 address
     @param _amount The amount of fromToken to invest
     @param _minPoolTokens Reverts if less tokens received than this
-    @param _allowanceTarget Spender for the first swap
-    @param _swapTarget Excecution target for the first swap
-    @param swapData DEX quote data
     @return Amount of LP bought
      */
     function ZapIn(
+        address _toWhomToIssue,
         address _FromTokenContractAddress,
-        address _pairAddress,
+        address _ToUnipoolToken0,
+        address _ToUnipoolToken1,
         uint256 _amount,
-        uint256 _minPoolTokens,
-        address _allowanceTarget,
-        address _swapTarget,
-        bytes calldata swapData
-    ) external payable nonReentrant stopInEmergency returns (uint256) {
+        uint256 _minPoolTokens
+    ) public payable nonReentrant stopInEmergency returns (uint256) {
         uint256 toInvest;
         if (_FromTokenContractAddress == address(0)) {
             require(msg.value > 0, "Error: ETH not sent");
@@ -953,97 +970,107 @@ contract Parabellum_Uniswap_In_V1 is ReentrancyGuard, Ownable {
         }
 
         uint256 LPBought = _performZapIn(
+            _toWhomToIssue,
             _FromTokenContractAddress,
-            _pairAddress,
-            toInvest,
-            _allowanceTarget,
-            _swapTarget,
-            swapData
+            _ToUnipoolToken0,
+            _ToUnipoolToken1,
+            toInvest
         );
         require(LPBought >= _minPoolTokens, "ERR: High Slippage");
 
-        //transfer goodwill
-        uint256 goodwillPortion = _transferGoodwill(_pairAddress, LPBought);
+        //get pair address
+        address _ToUniPoolAddress = UniSwapV2FactoryAddress.getPair(
+            _ToUnipoolToken0,
+            _ToUnipoolToken1
+        );
 
-        IERC20(_pairAddress).safeTransfer(
-            msg.sender,
+        //transfer goodwill
+        uint256 goodwillPortion = _transferGoodwill(
+            _ToUniPoolAddress,
+            LPBought
+        );
+
+        IERC20(_ToUniPoolAddress).safeTransfer(
+            _toWhomToIssue,
             SafeMath.sub(LPBought, goodwillPortion)
         );
         return SafeMath.sub(LPBought, goodwillPortion);
     }
 
-    function _getPairTokens(address _pairAddress)
-        internal
-        pure
-        returns (address token0, address token1)
-    {
-        IUniswapV2Pair uniPair = IUniswapV2Pair(_pairAddress);
-        token0 = uniPair.token0();
-        token1 = uniPair.token1();
-    }
-
     function _performZapIn(
+        address _toWhomToIssue,
         address _FromTokenContractAddress,
-        address _pairAddress,
-        uint256 _amount,
-        address _allowanceTarget,
-        address _swapTarget,
-        bytes memory swapData
+        address _ToUnipoolToken0,
+        address _ToUnipoolToken1,
+        uint256 _amount
     ) internal returns (uint256) {
-        uint256 intermediateAmt;
-        address intermediateToken;
-        (address _ToUniswapToken0, address _ToUniswapToken1) = _getPairTokens(
-            _pairAddress
+        address intermediate = _getIntermediate(
+            _FromTokenContractAddress,
+            _amount,
+            _ToUnipoolToken0,
+            _ToUnipoolToken1
         );
 
-        if (
-            _FromTokenContractAddress != _ToUniswapToken0 &&
-            _FromTokenContractAddress != _ToUniswapToken1
-        ) {
-            // swap to intermediate
-            (intermediateAmt, intermediateToken) = _fillQuote(
-                _FromTokenContractAddress,
-                _pairAddress,
-                _amount,
-                _allowanceTarget,
-                _swapTarget,
-                swapData
-            );
-        } else {
-            intermediateToken = _FromTokenContractAddress;
-            intermediateAmt = _amount;
-        }
-        // divide intermediate into appropriate amount to add liquidity
-        (uint256 token0Bought, uint256 token1Bought) = _swapIntermediate(
-            intermediateToken,
-            _ToUniswapToken0,
-            _ToUniswapToken1,
-            intermediateAmt
+        // swap to intermediate
+        uint256 interAmt = _token2Token(
+            _FromTokenContractAddress,
+            intermediate,
+            _amount
         );
+
+        // divide to swap in amounts
+        uint256 token0Bought;
+        uint256 token1Bought;
+
+        IUniswapV2Pair pair = IUniswapV2Pair(
+            UniSwapV2FactoryAddress.getPair(_ToUnipoolToken0, _ToUnipoolToken1)
+        );
+        (uint256 res0, uint256 res1, ) = pair.getReserves();
+
+        if (intermediate == _ToUnipoolToken0) {
+            uint256 amountToSwap = calculateSwapInAmount(res0, interAmt);
+            //if no reserve or a new pair is created
+            if (amountToSwap <= 0) amountToSwap = interAmt.div(2);
+            token1Bought = _token2Token(
+                intermediate,
+                _ToUnipoolToken1,
+                amountToSwap
+            );
+            token0Bought = interAmt.sub(amountToSwap);
+        } else {
+            uint256 amountToSwap = calculateSwapInAmount(res1, interAmt);
+            //if no reserve or a new pair is created
+            if (amountToSwap <= 0) amountToSwap = interAmt.div(2);
+            token0Bought = _token2Token(
+                intermediate,
+                _ToUnipoolToken0,
+                amountToSwap
+            );
+            token1Bought = interAmt.sub(amountToSwap);
+        }
 
         return
             _uniDeposit(
-                _ToUniswapToken0,
-                _ToUniswapToken1,
+                _toWhomToIssue,
+                _ToUnipoolToken0,
+                _ToUnipoolToken1,
                 token0Bought,
                 token1Bought
             );
     }
 
     function _uniDeposit(
+        address _toWhomToIssue,
         address _ToUnipoolToken0,
         address _ToUnipoolToken1,
         uint256 token0Bought,
         uint256 token1Bought
     ) internal returns (uint256) {
-        IERC20(_ToUnipoolToken0).safeApprove(address(uniswapRouter), 0);
-        IERC20(_ToUnipoolToken1).safeApprove(address(uniswapRouter), 0);
-
-        IERC20(_ToUnipoolToken0).safeApprove(
+        IERC20(_ToUnipoolToken0).safeIncreaseAllowance(
             address(uniswapRouter),
             token0Bought
         );
-        IERC20(_ToUnipoolToken1).safeApprove(
+        IERC20(_ToUnipoolToken1).safeIncreaseAllowance(
             address(uniswapRouter),
             token1Bought
         );
@@ -1063,7 +1090,7 @@ contract Parabellum_Uniswap_In_V1 is ReentrancyGuard, Ownable {
         //Returning Residue in token0, if any.
         if (token0Bought.sub(amountA) > 0) {
             IERC20(_ToUnipoolToken0).safeTransfer(
-                msg.sender,
+                _toWhomToIssue,
                 token0Bought.sub(amountA)
             );
         }
@@ -1071,7 +1098,7 @@ contract Parabellum_Uniswap_In_V1 is ReentrancyGuard, Ownable {
         //Returning Residue in token1, if any
         if (token1Bought.sub(amountB) > 0) {
             IERC20(_ToUnipoolToken1).safeTransfer(
-                msg.sender,
+                _toWhomToIssue,
                 token1Bought.sub(amountB)
             );
         }
@@ -1079,85 +1106,98 @@ contract Parabellum_Uniswap_In_V1 is ReentrancyGuard, Ownable {
         return LP;
     }
 
-    function _fillQuote(
-        address _fromTokenAddress,
-        address _pairAddress,
+    function _getIntermediate(
+        address _FromTokenContractAddress,
         uint256 _amount,
-        address _allowanceTarget,
-        address _swapTarget,
-        bytes memory swapCallData
-    ) internal returns (uint256 amountBought, address intermediateToken) {
-        uint256 valueToSend;
-        if (_fromTokenAddress == address(0)) {
-            valueToSend = _amount;
-        } else {
-            IERC20 fromToken = IERC20(_fromTokenAddress);
-            fromToken.safeApprove(address(_allowanceTarget), 0);
-            fromToken.safeApprove(address(_allowanceTarget), _amount);
+        address _ToUnipoolToken0,
+        address _ToUnipoolToken1
+    ) internal view returns (address) {
+        // set from to weth for eth input
+        if (_FromTokenContractAddress == address(0)) {
+            _FromTokenContractAddress = wethTokenAddress;
         }
 
-        (address _token0, address _token1) = _getPairTokens(_pairAddress);
-        IERC20 token0 = IERC20(_token0);
-        IERC20 token1 = IERC20(_token1);
-        uint256 initialBalance0 = token0.balanceOf(address(this));
-        uint256 initialBalance1 = token1.balanceOf(address(this));
-
-        (bool success, ) = _swapTarget.call.value(valueToSend)(swapCallData);
-        require(success, "Error Swapping Tokens 1");
-
-        uint256 finalBalance0 = token0.balanceOf(address(this)).sub(
-            initialBalance0
-        );
-        uint256 finalBalance1 = token1.balanceOf(address(this)).sub(
-            initialBalance1
-        );
-
-        if (finalBalance0 > finalBalance1) {
-            amountBought = finalBalance0;
-            intermediateToken = _token0;
+        if (_FromTokenContractAddress == _ToUnipoolToken0) {
+            return _ToUnipoolToken0;
+        } else if (_FromTokenContractAddress == _ToUnipoolToken1) {
+            return _ToUnipoolToken1;
         } else {
-            amountBought = finalBalance1;
-            intermediateToken = _token1;
-        }
+            IUniswapV2Pair pair = IUniswapV2Pair(
+                UniSwapV2FactoryAddress.getPair(
+                    _ToUnipoolToken0,
+                    _ToUnipoolToken1
+                )
+            );
+            (uint256 res0, uint256 res1, ) = pair.getReserves();
 
-        require(amountBought > 0, "Swapped to Invalid Intermediate");
+            uint256 ratio;
+            bool isToken0Numerator;
+            if (res0 >= res1) {
+                ratio = res0 / res1;
+                isToken0Numerator = true;
+            } else {
+                ratio = res1 / res0;
+            }
+
+            //find outputs on swap
+            uint256 output0 = _calculateSwapOutput(
+                _FromTokenContractAddress,
+                _amount,
+                _ToUnipoolToken0
+            );
+            uint256 output1 = _calculateSwapOutput(
+                _FromTokenContractAddress,
+                _amount,
+                _ToUnipoolToken1
+            );
+
+            if (isToken0Numerator) {
+                if (output1 * ratio >= output0) return _ToUnipoolToken1;
+                else return _ToUnipoolToken0;
+            } else {
+                if (output0 * ratio >= output1) return _ToUnipoolToken0;
+                else return _ToUnipoolToken1;
+            }
+        }
     }
 
-    function _swapIntermediate(
-        address _toContractAddress,
-        address _ToUnipoolToken0,
-        address _ToUnipoolToken1,
-        uint256 _amount
-    ) internal returns (uint256 token0Bought, uint256 token1Bought) {
-        IUniswapV2Pair pair = IUniswapV2Pair(
-            UniSwapV2FactoryAddress.getPair(_ToUnipoolToken0, _ToUnipoolToken1)
-        );
-        (uint256 res0, uint256 res1, ) = pair.getReserves();
-        if (_toContractAddress == _ToUnipoolToken0) {
-            uint256 amountToSwap = calculateSwapInAmount(res0, _amount);
-            //if no reserve or a new pair is created
-            if (amountToSwap <= 0) amountToSwap = _amount.div(2);
-            token1Bought = _token2Token(
-                _toContractAddress,
-                _ToUnipoolToken1,
-                amountToSwap
-            );
-            token0Bought = _amount.sub(amountToSwap);
+    function _calculateSwapOutput(
+        address _from,
+        uint256 _amt,
+        address _to
+    ) internal view returns (uint256) {
+        // check output via tokenA -> tokenB
+        address pairA = UniSwapV2FactoryAddress.getPair(_from, _to);
+
+        uint256 amtA;
+        if (pairA != address(0)) {
+            address[] memory pathA = new address[](2);
+            pathA[0] = _from;
+            pathA[1] = _to;
+
+            amtA = uniswapRouter.getAmountsOut(_amt, pathA)[1];
+        }
+
+        uint256 amtB;
+        // check output via tokenA -> weth -> tokenB
+        if ((_from != wethTokenAddress) && _to != wethTokenAddress) {
+            address[] memory pathB = new address[](3);
+            pathB[0] = _from;
+            pathB[1] = wethTokenAddress;
+            pathB[2] = _to;
+
+            amtB = uniswapRouter.getAmountsOut(_amt, pathB)[2];
+        }
+
+        if (amtA >= amtB) {
+            return amtA;
         } else {
-            uint256 amountToSwap = calculateSwapInAmount(res1, _amount);
-            //if no reserve or a new pair is created
-            if (amountToSwap <= 0) amountToSwap = _amount.div(2);
-            token0Bought = _token2Token(
-                _toContractAddress,
-                _ToUnipoolToken0,
-                amountToSwap
-            );
-            token1Bought = _amount.sub(amountToSwap);
+            return amtB;
         }
     }
 
     function calculateSwapInAmount(uint256 reserveIn, uint256 userIn)
-        internal
+        public
         pure
         returns (uint256)
     {
@@ -1170,9 +1210,9 @@ contract Parabellum_Uniswap_In_V1 is ReentrancyGuard, Ownable {
     }
 
     /**
-    @notice This function is used to swap ERC20 <> ERC20
-    @param _FromTokenContractAddress The token address to swap from.
-    @param _ToTokenContractAddress The token address to swap to. 
+    @notice This function is used to swap ETH/ERC20 <> ETH/ERC20
+    @param _FromTokenContractAddress The token address to swap from. (0x00 for ETH)
+    @param _ToTokenContractAddress The token address to swap to. (0x00 for ETH)
     @param tokens2Trade The amount of tokens to swap
     @return tokenBought The quantity of tokens bought
     */
@@ -1184,33 +1224,119 @@ contract Parabellum_Uniswap_In_V1 is ReentrancyGuard, Ownable {
         if (_FromTokenContractAddress == _ToTokenContractAddress) {
             return tokens2Trade;
         }
-        IERC20(_FromTokenContractAddress).safeApprove(
-            address(uniswapRouter),
-            0
-        );
-        IERC20(_FromTokenContractAddress).safeApprove(
-            address(uniswapRouter),
-            tokens2Trade
-        );
 
-        address pair = UniSwapV2FactoryAddress.getPair(
-            _FromTokenContractAddress,
-            _ToTokenContractAddress
-        );
-        require(pair != address(0), "No Swap Available");
-        address[] memory path = new address[](2);
-        path[0] = _FromTokenContractAddress;
-        path[1] = _ToTokenContractAddress;
+        if (_FromTokenContractAddress == address(0)) {
+            if (_ToTokenContractAddress == wethTokenAddress) {
+                IWETH(wethTokenAddress).deposit.value(tokens2Trade)();
+                return tokens2Trade;
+            }
 
-        tokenBought = uniswapRouter.swapExactTokensForTokens(
-            tokens2Trade,
-            1,
-            path,
-            address(this),
-            deadline
-        )[path.length - 1];
+            address[] memory path = new address[](2);
+            path[0] = wethTokenAddress;
+            path[1] = _ToTokenContractAddress;
+            tokenBought = uniswapRouter.swapExactETHForTokens.value(
+                tokens2Trade
+            )(1, path, address(this), deadline)[path.length - 1];
+        } else if (_ToTokenContractAddress == address(0)) {
+            if (_FromTokenContractAddress == wethTokenAddress) {
+                IWETH(wethTokenAddress).withdraw(tokens2Trade);
+                return tokens2Trade;
+            }
 
-        require(tokenBought > 0, "Error Swapping Tokens 2");
+            IERC20(_FromTokenContractAddress).safeIncreaseAllowance(
+                address(uniswapRouter),
+                tokens2Trade
+            );
+
+            address[] memory path = new address[](2);
+            path[0] = _FromTokenContractAddress;
+            path[1] = wethTokenAddress;
+            tokenBought = uniswapRouter.swapExactTokensForETH(
+                tokens2Trade,
+                1,
+                path,
+                address(this),
+                deadline
+            )[path.length - 1];
+        } else {
+            IERC20(_FromTokenContractAddress).safeIncreaseAllowance(
+                address(uniswapRouter),
+                tokens2Trade
+            );
+
+            if (_FromTokenContractAddress != wethTokenAddress) {
+                if (_ToTokenContractAddress != wethTokenAddress) {
+                    // check output via tokenA -> tokenB
+                    address pairA = UniSwapV2FactoryAddress.getPair(
+                        _FromTokenContractAddress,
+                        _ToTokenContractAddress
+                    );
+                    address[] memory pathA = new address[](2);
+                    pathA[0] = _FromTokenContractAddress;
+                    pathA[1] = _ToTokenContractAddress;
+                    uint256 amtA;
+                    if (pairA != address(0)) {
+                        amtA = uniswapRouter.getAmountsOut(
+                            tokens2Trade,
+                            pathA
+                        )[1];
+                    }
+
+                    // check output via tokenA -> weth -> tokenB
+                    address[] memory pathB = new address[](3);
+                    pathB[0] = _FromTokenContractAddress;
+                    pathB[1] = wethTokenAddress;
+                    pathB[2] = _ToTokenContractAddress;
+
+                    uint256 amtB = uniswapRouter.getAmountsOut(
+                        tokens2Trade,
+                        pathB
+                    )[2];
+
+                    if (amtA >= amtB) {
+                        tokenBought = uniswapRouter.swapExactTokensForTokens(
+                            tokens2Trade,
+                            1,
+                            pathA,
+                            address(this),
+                            deadline
+                        )[pathA.length - 1];
+                    } else {
+                        tokenBought = uniswapRouter.swapExactTokensForTokens(
+                            tokens2Trade,
+                            1,
+                            pathB,
+                            address(this),
+                            deadline
+                        )[pathB.length - 1];
+                    }
+                } else {
+                    address[] memory path = new address[](2);
+                    path[0] = _FromTokenContractAddress;
+                    path[1] = wethTokenAddress;
+
+                    tokenBought = uniswapRouter.swapExactTokensForTokens(
+                        tokens2Trade,
+                        1,
+                        path,
+                        address(this),
+                        deadline
+                    )[path.length - 1];
+                }
+            } else {
+                address[] memory path = new address[](2);
+                path[0] = wethTokenAddress;
+                path[1] = _ToTokenContractAddress;
+                tokenBought = uniswapRouter.swapExactTokensForTokens(
+                    tokens2Trade,
+                    1,
+                    path,
+                    address(this),
+                    deadline
+                )[path.length - 1];
+            }
+        }
+        require(tokenBought > 0, "Error Swapping Tokens");
     }
 
     /**
@@ -1261,5 +1387,9 @@ contract Parabellum_Uniswap_In_V1 is ReentrancyGuard, Ownable {
         uint256 contractBalance = address(this).balance;
         address payable _to = owner().toPayable();
         _to.transfer(contractBalance);
+    }
+
+    function() external payable {
+        require(msg.sender != tx.origin, "Do not send ETH directly");
     }
 }
