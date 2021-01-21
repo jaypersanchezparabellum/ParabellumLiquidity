@@ -3,7 +3,7 @@ var fs = require('fs')
 const BigNumber = require('bignumber.js');
 const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 const erc20contractJSON = fs.readFileSync('./ERC20.json')
-const parabellumcontractJSON = fs.readFileSync('./Parabellum_ZapIn_General_V2_4_1.json')
+const parabellumcontractJSON = fs.readFileSync('./Parabellum_In_General_V2_4_1.json')
 const erc20ABI = JSON.parse(erc20contractJSON);
 const parabellumABI = JSON.parse(parabellumcontractJSON)
 
@@ -27,12 +27,18 @@ const daiToken = new web3.eth.Contract(erc20ABI, fromToken);
 
 //Forked address for virtual use
 const _toWhomToIssue = '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1'
-const _ToUnipoolToken1 = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+//Uniswap V2 USDC/ETH
+const _ToUnipoolToken0 = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f' //<== this is Uniswap V2: Factory Contract address from Etherscan should be USDC
+//const _ToUnipoolToken1 = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2' //<== this is contract address to WETH
+
+//Uniswap V2 USDC/ETH
+//const _ToUnipoolToken0 = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' //USDC contract address from etherscan
+const _ToUnipoolToken1 = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2' //WETH
+
 //test with ether that is the ETH address
 const _FromTokenContractAddress = "0x0000000000000000000000000000000000000000";
                                           
-//USDC token smart contract address
-const _ToUnipoolToken0 = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
+
 //this is the amount of ETH that is being added.  This is should probably be converted from Eth to Wei
 //const amount = new BigNumber('0.01');
 const amount = new BigNumber(100000000000000000)
@@ -54,6 +60,7 @@ const minPoolTokens = 634999265606;
                 minPoolTokens
             );
             console.log(`Result ${result[0]} :: ${result[1]}`);
+            console.log(result)
         } catch (error) {
             console.log('Unable to add', error)
         }
@@ -80,7 +87,8 @@ async function addToLiquidSigned() {
                 signPromise.then((signedTx => {
                     const sentTx = web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction);
                     sentTx.on("receipt", receipt => {
-                        console.log(`receipt ${receipt.LPBought} :: ${receipt.goodwillPortion}`)
+                        //console.log(`receipt ${receipt.LPBought} :: ${receipt.goodwillPortion}`)
+                        console.log(result)
                     });
 
                     sentTx.on("error", err => {
@@ -92,5 +100,5 @@ async function addToLiquidSigned() {
                 })
 }
 
-addToLiquid();
-//addToLiquidSigned();
+//addToLiquid();
+addToLiquidSigned();

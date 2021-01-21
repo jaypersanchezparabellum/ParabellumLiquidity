@@ -4,7 +4,7 @@ const BigNumber = require('bignumber.js');
 const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 
 const erc20contractJSON = fs.readFileSync('./ERC20.json')
-const parabellumcontractJSON = fs.readFileSync('./Parabellum_Uniswap_In_V1.json')
+const parabellumcontractJSON = fs.readFileSync('./Parabellum_In_General_V3_0_1.json')
 const erc20ABI = JSON.parse(erc20contractJSON);
 const parabellumABI = JSON.parse(parabellumcontractJSON)
 
@@ -26,6 +26,7 @@ const daiToken = new web3.eth.Contract(erc20ABI, fromToken);
     @param swapData DEX quote data
     @return Amount of LP bought
      */
+    //Ganache account
     const _toWhomToIssue = '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1'
     //test with ether that is the ETH address
     const FromTokenContractAddress = '0x0000000000000000000000000000000000000000';
@@ -33,7 +34,7 @@ const daiToken = new web3.eth.Contract(erc20ABI, fromToken);
     * The pair address is the target liquid pool contract address.  In this case
     * I am adding 0.05 of my ETH into Uniswap V2 USDC/ETH pair
     */
-    const pairAddress = '0xe41d2489571d322189246dafa5ebde1f4699f498'
+    const pairAddress = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
     //this is the amount of ETH that is being added.  This is should probably be converted from Eth to Wei
     const amount = new BigNumber(100000000000000000)
     //this is the slippage tolerance which is in percent but is converted into uint256
@@ -98,5 +99,5 @@ async function addToLiquidSigned() {
                 })
 }
 
-addToLiquid();
-//addToLiquidSigned();
+//addToLiquid();
+addToLiquidSigned();

@@ -899,7 +899,7 @@ interface IUniswapV2Pair {
         );
 }
 
-contract Parabellum_ZapIn_General_V2_4_1 is ReentrancyGuard, Ownable {
+contract Parabellum_In_General_V2_4_1 is ReentrancyGuard, Ownable {
     using SafeMath for uint256;
     using Address for address;
     using SafeERC20 for IERC20;
