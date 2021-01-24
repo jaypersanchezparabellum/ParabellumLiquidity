@@ -25,7 +25,7 @@
 ///@notice This contract adds liquidity to Uniswap V2 pools using ETH or any ERC20 Token.
 // SPDX-License-Identifier: GPLv2
 
-pragma solidity ^0.5.0;
+pragma solidity 0.5.7;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP. Does not include

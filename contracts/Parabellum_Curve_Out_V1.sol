@@ -4,7 +4,7 @@
 * This contract removes liquidity from Curve stablecoin and BTC liquidity pools in one transaction with ETH or ERC tokens.
 */
 
-pragma solidity ^0.5.5;
+pragma solidity 0.5.7;
 
 /*
  * @dev Provides information about the current execution context, including the

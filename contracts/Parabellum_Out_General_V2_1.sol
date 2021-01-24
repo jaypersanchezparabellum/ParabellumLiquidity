@@ -25,7 +25,7 @@
 ///@author Zapper
 ///@notice this contract implements one click removal of liquidity from Uniswap V2 pools, receiving ETH, ERC tokens or both.
 
-pragma solidity ^0.5.0;
+pragma solidity 0.5.7;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
