@@ -1,7 +1,8 @@
 var Web3 = require('web3');
 var fs = require('fs')
 const BigNumber = require('bignumber.js');
-const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
+//const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
+const web3 = new Web3(new Web3.providers.HttpProvider(process.env.WEB3_URL));
 const erc20contractJSON = fs.readFileSync('./ERC20.json')
 const parabellumcontractJSON = fs.readFileSync('./Parabellum_In_General_V2_4_1.json')
 const erc20ABI = JSON.parse(erc20contractJSON);
@@ -48,7 +49,7 @@ const minPoolTokens = 634999265606;
     
 
     async function addToLiquid() {
-        console.log(`PARAMS :: ${_toWhomToIssue} :: ${_FromTokenContractAddress} :: ${_ToUnipoolToken0} :: ${_ToUnipoolToken1} :: ${amount} :: ${minPoolTokens}`);
+        //console.log(`PARAMS :: ${_toWhomToIssue} :: ${_FromTokenContractAddress} :: ${_ToUnipoolToken0} :: ${_ToUnipoolToken1} :: ${amount} :: ${minPoolTokens}`);
         let result
         try {
             result = await parabellumContract.methods.ZapIn(
@@ -58,7 +59,7 @@ const minPoolTokens = 634999265606;
                 _ToUnipoolToken1,
                 amount,
                 minPoolTokens
-            );
+            ).send({from:_toWhomToIssue, value:amount});;
             console.log(`Result ${result[0]} :: ${result[1]}`);
             console.log(result)
         } catch (error) {
@@ -100,5 +101,5 @@ async function addToLiquidSigned() {
                 })
 }
 
-//addToLiquid();
-addToLiquidSigned();
+addToLiquid();
+//addToLiquidSigned();
