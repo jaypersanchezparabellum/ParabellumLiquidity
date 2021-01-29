@@ -82,18 +82,20 @@ async function addToLiquid() {
 
 
 async function addToLiquidSigned(_swapData) {
-    console.log(`PARAMS :: ${ZapInData.FromTokenContractAddress} :: ${ZapInData.pairAddress} :: ${ZapInData.amount} 
-                        :: ${ZapInData.minPoolTokens} :: ${ZapInData.allowanceTarget} :: ${ZapInData.swapTarget} :: ${_swapData}`)
+    //console.log(`PARAMS :: ${ZapInData.FromTokenContractAddress} :: ${ZapInData.pairAddress} :: ${ZapInData.amount} 
+      //                  :: ${ZapInData.minPoolTokens} :: ${ZapInData.allowanceTarget} :: ${ZapInData.swapTarget} :: ${_swapData}`)
                 const myContract = new web3.eth.Contract(parabellumABI,parabellumAddress);
+                //get gas estimation for price and limit
                 gprice = web3.eth.getGasPrice(function(e,r) {
-                    console.log(`Current Gas Price: ${gprice}`)
+
+                    console.log(`Current Gas Price: ${e} :: ${r}`)
                 })
                 const tx = {
                     from: process.env.WALLET_ADDRESS,
                     to: ZapInData.pairAddress,
                     value:ZapInData.amount,
-                    gasPrice:web3.utils.toHex(71000000000),
-                    gasLimit:web3.utils.toHex(72000000000),
+                    gasPrice:web3.utils.toHex(18000000000),
+                    gasLimit:web3.utils.toHex(166640000000),
                     data: myContract.methods.ZapIn(
                                 ZapInData.FromTokenContractAddress,
                                 ZapInData.pairAddress,
@@ -161,7 +163,7 @@ function addLiquidity() {
 const ZapInData = {
     FromTokenContractAddress : process.env.ETH_CONTRACT_ADDRESS,
     pairAddress : process.env.UNISWAPV2_USDC3_ETH_ADDRESS,
-    amount: new BigNumber(1000000000000000), //0.001 ETH
+    amount: new BigNumber(10000000000000000), //0.001 ETH
     minPoolTokens : 1262872576,
     allowanceTarget : process.env.MAINNET_OX_EXCHANGE_CONTRACT_ADDRESS,
     swapTarget : process.env.MAINNET_OX_EXCHANGE_CONTRACT_ADDRESS,
