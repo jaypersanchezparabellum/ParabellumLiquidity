@@ -85,12 +85,15 @@ async function addToLiquidSigned(_swapData) {
     console.log(`PARAMS :: ${ZapInData.FromTokenContractAddress} :: ${ZapInData.pairAddress} :: ${ZapInData.amount} 
                         :: ${ZapInData.minPoolTokens} :: ${ZapInData.allowanceTarget} :: ${ZapInData.swapTarget} :: ${_swapData}`)
                 const myContract = new web3.eth.Contract(parabellumABI,parabellumAddress);
+                gprice = web3.eth.getGasPrice(function(e,r) {
+                    console.log(`Current Gas Price: ${gprice}`)
+                })
                 const tx = {
                     from: process.env.WALLET_ADDRESS,
                     to: ZapInData.pairAddress,
                     value:ZapInData.amount,
-                    gasPrice:web3.utils.toHex(5500000000),
-                    gasLimit:web3.utils.toHex(2000000),
+                    gasPrice:web3.utils.toHex(71000000000),
+                    gasLimit:web3.utils.toHex(72000000000),
                     data: myContract.methods.ZapIn(
                                 ZapInData.FromTokenContractAddress,
                                 ZapInData.pairAddress,
