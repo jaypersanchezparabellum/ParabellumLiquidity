@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.34/dist/web3.min.js"></script>
+  <script src="https://cdn.ethers.io/lib/ethers-5.0.umd.min.js" type="application/javascript"></script>
+  
+  <title>Anatha Exchange</title>
+</head>
+<body>
+  
+  <div>
+    <div>
+    <input type='text' id='ethamount' placeholder='ETH Amount' value='0.001'>
+    </div>
+    <div>
+    <input type='text' id='FromTokenContractAddress' placeholder='FromTokenContractAddress' value='0x0000000000000000000000000000000000000000' />
+    </div>
+    <div>
+    <input type='text' id='pairAddress' placeholder='pairAddress' value='0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc' />
+    </div>
+    <div>
+    <input type='text' id='amount' placeholder='amount' value='1000000000000000' />
+    </div>
+    <div>
+    <input type='text' id='minPoolTokens' placeholder='minPoolTokens' value='1262872576' />
+    </div>
+    <div>
+    <input type='text' id='allowanceTarget' placeholder='allowanceTarget' value='0xDef1C0ded9bec7F1a1670819833240f027b25EfF' />
+    </div>
+    <div>
+    <input type='text' id='swapTarget' placeholder='swapTarget' value='0xDef1C0ded9bec7F1a1670819833240f027b25EfF' />
+    </div>
+  </div>
+
+  <button id="addliquidity">Add To Pool</button>
+
+  <script>
+            window.addEventListener('load', async () => {
+
+                    if (typeof web3 !== 'undefined') {
+                      var web3Provider = new ethers.providers.Web3Provider(web3.currentProvider, ethers.providers.networks.ropsten);
+                      web3Provider.getBalance("..some address.."). then(function(balance) {
+                        var etherString = ethers.utils.formatEther(balance);
+                        console.log("Balance: " + etherString);
+                      });
+                    }
+                    else {
+                              if (window.ethereum) {
+                                  window.web3 = new Web3(ethereum);
+                                  try {
+                                      await ethereum.enable();
+                                      web3.eth.sendTransaction({});
+                                  } catch (error) {
+                                      
+                                  }
+                              }
+                              else if (window.web3) {
+                                  window.web3 = new Web3(web3.currentProvider);
+                                  web3.eth.sendTransaction({});
+                              }
+                              else {
+                                  console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+                              }
+                    }
+
+                // Modern dapp browsers...
+                /*if (window.ethereum) {
+                    window.web3 = new Web3(ethereum);
+                    try {
+                        await ethereum.enable();
+                        web3.eth.sendTransaction({});
+                    } catch (error) {
+                        
+                    }
+                }
+                else if (window.web3) {
+                    window.web3 = new Web3(web3.currentProvider);
+                    web3.eth.sendTransaction({});
+                }
+                else {
+                    console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+                }*/
+            });
+  </script>
+
+  <script>
+    document.getElementById("addliquidity").addEventListener("click", function() {
+
+        if (typeof window.ethereum !== 'undefined') {
+          console.log('MetaMask is installed!');
+        }
+
+        var web3js = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257'));
+        
+
+      _fromtokencontractaddress = document.getElementById('FromTokenContractAddress').value 
+      _pairaddress = document.getElementById('pairAddress').value
+      _amount = document.getElementById('amount').value
+      _minpooltokens = document.getElementById('minPoolTokens').value
+      _allowancetarget = document.getElementById('allowanceTarget').value
+      _swaptarget = document.getElementById('swapTarget').value
+
+      /*const ZapInData = {
+          gasPrice: '0x09184e72a000',
+          gasLimit: '0x2710',
+          FromTokenContractAddress : _fromtokencontractaddress,
+          pairAddress : _pairaddress,
+          amount: _amount,
+          minPoolTokens : _minpooltokens,
+          allowanceTarget : _allowancetarget,
+          swapTarget : _swaptarget
+      }*/
+
+      const transactionParameters = {
+        nonce: '0x00', // ignored by MetaMask
+        gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
+        gas: '0x2710', // customizable by user during MetaMask confirmation.
+        to: '0x0000000000000000000000000000000000000000', // Required except during contract publications.
+        from: web3js.eth.accounts, // must match user's active address.
+        value: '0x00', // Only required to send ether to the recipient from the initiating external account.
+        data:
+          '0x7f7465737432000000000000000000000000000000000000000000000000000000600057', // Optional, but used for defining smart contract creation and interaction.
+        chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+      };
+
+      //window.ethereum.request({method:'eth_requestAccounts'})
+      /*const txHash = window.ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [transactionParameters]
+      })*/
+    
+    });
+  </script>
+
+
+</body>
+</html>

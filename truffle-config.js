@@ -2,6 +2,7 @@ require('dotenv').config();
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 const infuraKey = process.env.MNEMONIC;
 const fs = require('fs');
+const { default: Web3 } = require('web3');
 //const mnemonic = fs.readFileSync(".secret").toString().trim();
 const privKeys = process.env.PRIVATE_KEY
 
@@ -31,6 +32,14 @@ module.exports = {
       timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
       skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     },
+    mainnet: {
+      provider: new HDWalletProvider(process.env.MAINNET_PRIVATE_KEY, process.env.MAINNET_INFURA),
+      network_id: 1,       // Mainnet id
+      //gasPrice: 20000000000,        // Rinkeby has a lower block limit than mainnet
+      confirmations: 2,    // # of confs to wait between deployments. (default: 0)
+      timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
+      skipDryRun: false     // Skip dry run before migrations? (default: false for public nets )
+    }
   },
   compilers: {
     solc: {

@@ -11643,8 +11643,8 @@
           }
         ],
         "contractDependencies": [
-          59,
           175,
+          59,
           458
         ],
         "contractKind": "contract",
@@ -36204,8 +36204,8 @@
       {
         "attributes": {
           "contractDependencies": [
-            59,
             175,
+            59,
             458
           ],
           "contractKind": "contract",
@@ -49353,7 +49353,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.3",
-  "updatedAt": "2021-01-24T21:41:47.301Z",
+  "updatedAt": "2021-01-27T05:37:27.966Z",
   "devdoc": {
     "methods": {
       "ZapIn(address,address,address,uint256,uint256,address,address,bytes)": {

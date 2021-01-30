@@ -3,82 +3,13 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var fs = require('fs')
 require('dotenv').config();
 const BigNumber = require('bignumber.js');
-const web3 = new Web3(new Web3.providers.HttpProvider(process.env.KOVAN_INFURA));
+const web3 = new Web3(new Web3.providers.HttpProvider(process.env.INFURA_MAINNET));
 const erc20contractJSON = fs.readFileSync('./ERC20.json')
 const parabellumcontractJSON = fs.readFileSync('./Parabellum_In_General_V3_0_1.json')
 const erc20ABI = JSON.parse(erc20contractJSON);
 const parabellumABI = JSON.parse(parabellumcontractJSON)
-
 const parabellumAddress = process.env.ZAPIN_MAINNET;
 const parabellumContract = new web3.eth.Contract(parabellumABI, parabellumAddress);
-
-function approveToken(tokenInstance, receiver, amount) {
-    tokenInstance.methods.approve(receiver, amount).send({ from: _toWhomToIssue }, async function(error, txHash) {
-        if (error) {
-            console.log("ERC20 could not be approved", error);
-            return false;
-        }
-        console.log("ERC20 token approved to " + receiver);
-        const status = await waitTransaction(txHash);
-        if (!status) {
-            console.log("Approval transaction failed.");
-            return false;
-        }
-        parabellumContract.methods.ZapIn(
-            FromTokenContractAddress,
-            pairAddress,
-            amount,
-            minPoolTokens,
-            allowanceTarget,
-            swapTarget,
-            swapData
-        ).send({from:_toWhomToIssue, value:amount}, async function(error, txHash) {
-            if (error) {
-                console.log("Unable to add into liquidity pool", error);
-                return;
-            }
-            const status = await waitTransaction(txHash);
-            // We check the final balances after the swap for logging purpose
-            let ethBalanceAfter = await web3.eth.getBalance(_toWhomToIssue);
-            let daiBalanceAfter = await daiToken.methods.balanceOf(_toWhomToIssue).call();
-            console.log("Final Status: ", status)
-            console.log("Final balances:")
-            console.log("Change in ETH balance", new BigNumber(ethBalanceAfter).minus(ethBalanceBefore).shiftedBy(-fromTokenDecimals).toFixed(2));
-            console.log("Change in USDC balance", new BigNumber(daiBalanceAfter).minus(daiBalanceBefore).shiftedBy(-fromTokenDecimals).toFixed(2))
-        });
-    })
-}
-
-async function waitTransaction(txHash) {
-    let tx = null;
-    while (tx == null) {
-        tx = await web3.eth.getTransactionReceipt(txHash);
-        //await sleep(2000);
-        //setTimeout(() => {  console.log("Transaction Done!"); }, 2000);
-    }
-    console.log("Transaction " + txHash + " was mined.");
-    return (tx.status);
-}
-
-
-async function addToLiquid() {
-        console.log(`PARAMS :: ${FromTokenContractAddress} :: ${pairAddress} :: ${amount} :: ${minPoolTokens} :: ${allowanceTarget} :: ${swapTarget}`);
-        let result
-        try {
-            result = await parabellumContract.methods.ZapIn(
-                FromTokenContractAddress,
-                pairAddress,
-                amount,
-                minPoolTokens,
-                allowanceTarget,
-                swapTarget,
-                swapData
-            ).send({from:'0xB5A7b7658c8daA57AE9F538C0315d4fa44Fe0bE4', value:amount});
-            console.log(`Result ${result.LPBought} :: ${result.goodwillPortion}`);
-        } catch (error) {
-            console.log('Unable to add', error)
-        }
-}
 
 
 async function addToLiquidSigned(_swapData) {
@@ -126,9 +57,6 @@ async function addToLiquidSigned(_swapData) {
                 })
 }
 
-function calculateSlippage() {
-    
-}
 
 function addLiquidity() {
     //https://mainnet.api.0x.org/swap/v1/quote?sellToken=0xd0A1E359811322d97991E03f863a0C30C2cF029C&buyToken=0x1528f3fcc26d13f7079325fb78d9442607781c8c&buyAmount=100000000000000
@@ -150,21 +78,8 @@ function addLiquidity() {
     Http.send();
 }
 
-function gasEstimate() {
-    /*let gasestimate = web3.eth.estimateGas({
-        from:process.env.WALLET_ADDRESS,
-        to: ZapInData.pairAddress,
-        data_data: tx
-    })
-    gasestimate.then((estimate => {
-        console.log(estimate)
-    }))
-    .then(estimate => {
-
-        
-
-    })*/
-}
+function gasEstimate() {}
+function calculateSlippage() {}
 
 /*
     FromTokenContractAddress - this will be the address of the originating token. If ETH is being added into the poll, the the address will be the ETH smart contract address
@@ -193,9 +108,3 @@ let swapData
 */
 //calculateSlippage(); 
 addLiquidity()
-//addToLiquidSigned();
-/*
-*   addToLiquid();
-*   Aproval should be required if exhchanging or adding into a pool that is not ETH to ETH.  
-*   approveToken(daiToken, parabellumAddress, amount)
-*/
