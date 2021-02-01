@@ -914,10 +914,17 @@
       "links": {},
       "address": "0x58DDDC93285266Fd2C2c37AF6E51d678cEd2aFb8",
       "transactionHash": "0x9fe971b7e62959507f88c6b8f1c2d2467cfbc84570a4864027bd998b5c40ee58"
+    },
+    "42": {
+      "events": {},
+      "links": {},
+      "address": "0x465143c81C8fb03796bF36627f2f4B08042e8FC6",
+      "transactionHash": "0xc83a25760d4b250c791ef9517b585b9c7ec909b469c0827a21a7df48917aa5c8"
     }
   },
   "schemaVersion": "3.3.3",
-  "updatedAt": "2021-01-27T05:37:27.180Z",
+  "updatedAt": "2021-01-30T23:24:14.258Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {}
   },

@@ -67676,7 +67676,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.3",
-  "updatedAt": "2021-01-27T05:37:29.131Z",
+  "updatedAt": "2021-01-30T23:23:04.736Z",
   "devdoc": {
     "methods": {
       "ZapIn(address,address,address,address,uint256,uint256)": {

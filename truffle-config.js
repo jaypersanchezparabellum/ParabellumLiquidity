@@ -23,9 +23,17 @@ module.exports = {
       gas: 8000000,
       gasPrice: 1000000000, // web3.eth.gasPrice
     },
+    kovan: {
+      provider: new HDWalletProvider(process.env.KOVAN_PRIVATE_KEY, process.env.KOVAN_INFURA),
+      network_id: 42,       // Kovan id
+      gas: 5500000,        // Kovan has a lower block limit than mainnet
+      confirmations: 2,    // # of confs to wait between deployments. (default: 0)
+      timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
+      skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
+    },
     rinkeby: {
       //provider: new HDWalletProvider(process.env.MNEMONIC, process.env.INFURA),
-      provider: new HDWalletProvider(process.env.PRIVATE_KEY, process.env.INFURA),
+      provider: new HDWalletProvider(process.env.PRIVATE_KEY, process.env.RINKEBY_INFURA),
       network_id: 4,       // Rinkeby's id
       gas: 5500000,        // Rinkeby has a lower block limit than mainnet
       confirmations: 2,    // # of confs to wait between deployments. (default: 0)
@@ -35,7 +43,8 @@ module.exports = {
     mainnet: {
       provider: new HDWalletProvider(process.env.MAINNET_PRIVATE_KEY, process.env.MAINNET_INFURA),
       network_id: 1,       // Mainnet id
-      //gasPrice: 20000000000,        // Rinkeby has a lower block limit than mainnet
+      gasPrice: 71000000000,        
+      gasLimit: 8000000,
       confirmations: 2,    // # of confs to wait between deployments. (default: 0)
       timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
       skipDryRun: false     // Skip dry run before migrations? (default: false for public nets )

@@ -6,13 +6,19 @@ This is Antebellum's Liquidity Pool Smart Contract
 
 Rinkeby
 
-|   Contract Name   |   Address |
-|-----------------------------------|-----------------------------------------------|   
-|   Parabellum_In_General_V3_0_1    |   0xb1D87aA042120B55419B980D81B6e9C7caE5aA5f  |
+|   Network |   Contract Name   |   Address |
+|-----------|-----------------------------------|-----------------------------------------------|   
+|   Rinkeby | Parabellum_In_General_V3_0_1    |   0xb1D87aA042120B55419B980D81B6e9C7caE5aA5f  |
+| Kovan     | Parabellum_In_General_V3_0_1    |   0xe049d4f9087a3d66e5158f4a231939dada198220  |
 
 
 
 ## Smart Contract Addresses
+
+Kovan
+|   Contract Name   |   Address |
+|-----------------------------------|-----------------------------------------------| 
+
 
 Rinkeby
 

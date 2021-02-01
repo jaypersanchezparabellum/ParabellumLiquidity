@@ -59794,10 +59794,35 @@
       "links": {},
       "address": "0xb1D87aA042120B55419B980D81B6e9C7caE5aA5f",
       "transactionHash": "0x99b01859d9d96ba61ed7d2aca5248c3262ef47777d8bdad8fb07f08d233a98a6"
+    },
+    "42": {
+      "events": {
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xe049D4f9087A3d66E5158F4a231939DaDA198220",
+      "transactionHash": "0xe9a5f4e05794e8982b613d4ff838c18aa132914a0e2d2f28d0e7f7bcd2d37fa9"
     }
   },
   "schemaVersion": "3.3.3",
-  "updatedAt": "2021-01-27T05:37:29.234Z",
+  "updatedAt": "2021-01-30T23:24:14.232Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {
       "ZapIn(address,address,uint256,uint256,address,address,bytes)": {

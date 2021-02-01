@@ -3,7 +3,7 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var fs = require('fs')
 require('dotenv').config();
 const BigNumber = require('bignumber.js');
-const web3 = new Web3(new Web3.providers.HttpProvider(process.env.INFURA_MAINNET));
+const web3 = new Web3(new Web3.providers.HttpProvider(process.env.WEB3_URL));
 const erc20contractJSON = fs.readFileSync('./ERC20.json')
 const parabellumcontractJSON = fs.readFileSync('./Parabellum_In_General_V3_0_1.json')
 const erc20ABI = JSON.parse(erc20contractJSON);
@@ -13,11 +13,11 @@ const parabellumContract = new web3.eth.Contract(parabellumABI, parabellumAddres
 
 
 async function addToLiquidSigned(_swapData) {
-    //console.log(`PARAMS :: ${ZapInData.FromTokenContractAddress} :: ${ZapInData.pairAddress} :: ${ZapInData.amount} 
-      //                  :: ${ZapInData.minPoolTokens} :: ${ZapInData.allowanceTarget} :: ${ZapInData.swapTarget} :: ${_swapData}`)
+    console.log(`PARAMS :: ${ZapInData.FromTokenContractAddress} :: ${ZapInData.pairAddress} :: ${ZapInData.amount} 
+                        :: ${ZapInData.minPoolTokens} :: ${ZapInData.allowanceTarget} :: ${ZapInData.swapTarget} :: ${_swapData}`)
                 const myContract = new web3.eth.Contract(parabellumABI,parabellumAddress);
                 //get gas estimation for price and limit
-                const _gasLimit = 8000000;
+                const _gasLimit = 1000000;
                 let _gasPrice 
                 gprice = web3.eth.getGasPrice(function(e,r) {
                     _gasPrice = r;
@@ -28,7 +28,7 @@ async function addToLiquidSigned(_swapData) {
                     from: process.env.WALLET_ADDRESS,
                     to: ZapInData.pairAddress,
                     value:ZapInData.amount,
-                    gasPrice:web3.utils.toHex(_gasPrice),
+                    gasPrice:web3.utils.toHex(75000000000),
                     gasLimit:web3.utils.toHex(_gasLimit),
                     data: myContract.methods.ZapIn(
                                 ZapInData.FromTokenContractAddress,
@@ -66,12 +66,13 @@ function addLiquidity() {
     Http.open("GET",URL,true);
     
     Http.onreadystatechange = function(e) {
-        
+        console.log(Http.readyState + " :: " + Http.status )
                         if( Http.readyState == 4 && Http.status == 200 ) {
-                                    //console.log(Http.responseText);
+                                    console.log(Http.responseText);
                                     //strifiedData = JSON.stringify(Http.responseText)
                                     parsedData = JSON.parse( Http.responseText )
                                     swapData = parsedData.data
+                                    console.log(swapData)
                                     addToLiquidSigned(swapData)
                         }
     }
@@ -95,7 +96,7 @@ function calculateSlippage() {}
 const ZapInData = {
     FromTokenContractAddress : process.env.ETH_CONTRACT_ADDRESS,
     pairAddress : process.env.UNISWAPV2_USDC3_ETH_ADDRESS,
-    amount: new BigNumber(10000000000000000), //0.001 ETH
+    amount: new BigNumber(3600000000000000), //0.0036 ETH
     minPoolTokens : 1262872576,
     allowanceTarget : process.env.MAINNET_OX_EXCHANGE_CONTRACT_ADDRESS,
     swapTarget : process.env.MAINNET_OX_EXCHANGE_CONTRACT_ADDRESS,
