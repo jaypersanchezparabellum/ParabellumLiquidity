@@ -52,21 +52,7 @@ async function addToLiquidSigned(_swapData) {
                         console.log(`Error: ${err}`)
                     });
                 }));
-                //const signPromise = web3.eth.accounts.signTransaction(tx, process.env.KOVAN_PRIVATE_KEY)
-                /*signPromise.then((signedTx => {
-                    const sentTx = web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction);
-                    sentTx.on("receipt", receipt => {
-                        console.log(`Liquidity Added :: ${receipt}`)
-                        console.log(`receipt ${receipt.LPBought} :: ${receipt.goodwillPortion}`)
-                    });
-
-                    sentTx.on("error", err => {
-                        console.log(`Error: ${err}`)
-                    });
-
-                })).catch((err) => {
-                    console.log(`Unable to sign transaction ${err}`)
-                })*/
+                
 }
 
 
@@ -105,12 +91,12 @@ function calculateSlippage() {}
 */
 //Liquidity pool payload data
 const ZapInData = {
-    FromTokenContractAddress : process.env.KOVAN_ETH_ADDRESS,
-    pairAddress : process.env.KOVAN_UNISWAPV2_USDC3_ETH_ADDRESS,
-    amount: new BigNumber(10000000000000000), //0.001 ETH
+    FromTokenContractAddress : process.env.ETH_CONTRACT_ADDRESS,
+    pairAddress : process.env.KOVAN_CHAINLINK,
+    amount: new BigNumber(1000000000000000), //0.001 ETH
     minPoolTokens : 1262872576,
-    allowanceTarget : process.env.MAINNET_OX_EXCHANGE_CONTRACT_ADDRESS,
-    swapTarget : process.env.MAINNET_OX_EXCHANGE_CONTRACT_ADDRESS,
+    allowanceTarget : process.env.KOVAN_OX_EXCHANGE_CONTRACT_ADDRESS,
+    swapTarget : process.env.KOVAN_OX_EXCHANGE_CONTRACT_ADDRESS,
 }
 let swapData
 

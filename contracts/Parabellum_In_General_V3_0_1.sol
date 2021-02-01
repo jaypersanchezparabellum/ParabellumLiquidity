@@ -888,6 +888,7 @@ contract Parabellum_In_General_V3_0_1 is ReentrancyGuard, Ownable {
     uint16 public goodwill;
     address
         private constant zgoodwillAddress = 0xE737b6AfEC2320f616297e59445b60a11e3eF75F;
+    string public name;
 
     IUniswapV2Factory
         private constant UniSwapV2FactoryAddress = IUniswapV2Factory(
@@ -904,8 +905,14 @@ contract Parabellum_In_General_V3_0_1 is ReentrancyGuard, Ownable {
     uint256
         private constant deadline = 0xf000000000000000000000000000000000000000000000000000000000000000;
 
-    constructor(uint16 _goodwill) public {
+    constructor(uint16 _goodwill, string memory _name) public {
         goodwill = _goodwill;
+        name = _name;
+        
+    }
+
+    function getName() public view returns(string memory) {
+        return name;
     }
 
     // circuit breaker modifiers
@@ -916,6 +923,8 @@ contract Parabellum_In_General_V3_0_1 is ReentrancyGuard, Ownable {
             _;
         }
     }
+
+    
 
     /**
     @notice This function is used to invest in given Uniswap V2 pair through ETH/ERC20 Tokens
