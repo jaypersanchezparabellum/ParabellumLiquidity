@@ -60,7 +60,7 @@ async function addToLiquidSigned(_swapData) {
 function addLiquidity() {
     //https://mainnet.api.0x.org/swap/v1/quote?sellToken=0xd0A1E359811322d97991E03f863a0C30C2cF029C&buyToken=0x1528f3fcc26d13f7079325fb78d9442607781c8c&buyAmount=100000000000000
     const Http = new XMLHttpRequest();
-    const URL = `${process.env.KOVAN_API0XURL}?sellToken=ETH&buyToken=USDC&buyAmount=${ZapInData.amount}`
+    const URL = `${process.env.KOVAN_API0XURL}?sellToken=ETH&buyToken=USDT&buyAmount=${ZapInData.amount}`
     console.log(URL)
     Http.open("GET",URL,true);
     
