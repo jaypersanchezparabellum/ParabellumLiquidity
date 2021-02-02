@@ -22,6 +22,8 @@ This is Antebellum's Liquidity Pool Smart Contract
 |   Contract Name   |   Address |   Notes                                       |
 |-----------------------------------|-----------------------------------------------| |
 | Parabellum_In_General_V3_0_1    |   0x7eA3bf259208eb2Db3623b55DCC4F964D23B5BA0  | |
+|                   Parabellum_In_General_V3_0_1              | 0xDfE8Ad69E9cF0E136c5f07332AaC7ac93d44BFA9  | Verified in Kovan Etherescan |
+| Parabellum_In_General_V3_0_1  |   0x584bDD9da8734C4780D63843e8D87070c0D06027  |   3rd deploy  |
 | USDT Tether Token               | 0x84F395c5d3102541D78EB9F04bB29552426D8Fda    | forked from this site https://forum.makerdao.com/t/usdt-erc20-token-smart-contract-technical-assessment/3462 |
 | USDT Token        | 0xe4ed9de7c8ccab8cfd2a5e88c209bd6cdb9c86ad                    |   |
 | USDC              | 0xbdb90d3c7bf95bab974062e59dc531b2adba92b5                    |   |
