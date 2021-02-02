@@ -12,7 +12,7 @@ let web3 = new Web3(window.ethereum);
 
 function addToPool() {
   //alert(`addToPool`)
-  const web3 = new Web3(Web3.currentProvider || "https://mainnet.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257")
+  const web3 = new Web3(Web3.currentProvider || "https://ropsten.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257")
     web3.eth.net.getNetworkType()
     .then(network => {
       console.log(network) // should give you main if you're connected to the main network via metamask...
@@ -21,7 +21,7 @@ function addToPool() {
 }
 
 function transferToken() {
-  window.web3 = new Web3(Web3.givenProvider || "https://mainnet.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257");
+  window.web3 = new Web3(Web3.givenProvider || "https://ropsten.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257");
   window.ethereum.enable()
   .then(() => {
     window.web3.eth.sendTransaction({
@@ -44,23 +44,23 @@ function transferToken() {
 
 function parabellumAdd() {
   const parabellumAddress = process.env.ZAPIN_MAINNET;
-  const parabellumContract = new web3.eth.Contract(parabellumcontractJSON, parabellumAddress);
-  window.web3 = new Web3(Web3.givenProvider || "https://mainnet.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257");
+  const parabellumContract = new web3.eth.Contract(parabellumcontractJSON, '0x8B5BE234D39425620216145169c866e335F20794');
+  window.web3 = new Web3(Web3.givenProvider || "https://ropsten.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257");
   window.ethereum.enable()
   .then(() => {
     window.web3.eth.sendTransaction({
-                    from: '0x67C30288c1F30756AbEE69A12e13532111DDE404',
-                    to: '0x84F395c5d3102541D78EB9F04bB29552426D8Fda',
+                    from: '0x923359F72080CFE2647711eD7BCb8fC25E938B7e',
+                    to: '0x4A6a2F8c7b5F3e756868bc9AA24693aDb17f710f',
                     value:1000000000000000,
                     gasPrice:68000000,
                     gasLimit:1000000,
                     data: parabellumContract.methods.ZapIn(
-                      '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
-                      '0x84F395c5d3102541D78EB9F04bB29552426D8Fda',
+                      '0xc778417e063141139fce010982780140aa0cd5ab',
+                      '0x4A6a2F8c7b5F3e756868bc9AA24693aDb17f710f',
                       1000000000000000,
                       1262872576,
-                      '0x4eacd0af335451709e1e7b570b8ea68edec8bc97',
-                      '0x4eacd0af335451709e1e7b570b8ea68edec8bc97',
+                      '0xfb2dd2a1366de37f7241c83d47da58fd503e2c64',
+                      '0xfb2dd2a1366de37f7241c83d47da58fd503e2c64',
                       '0X0'
                     ).encodeABI()
     })
@@ -81,7 +81,7 @@ function App() {
     web3 = new Web3(web3.currentProvider);
   } else {
     // set the provider you want from Web3.providers
-    web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257"));
+    web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257"));
   }
  
   
@@ -93,10 +93,10 @@ function App() {
                     <input type='text' id='ethamount' placeholder='ETH Amount' value='0.001' />
                     </div>
                     <div>
-                    <input type='text' id='FromTokenContractAddress' placeholder='FromTokenContractAddress' value='0xd0a1e359811322d97991e03f863a0c30c2cf029c' />
+                    <input type='text' id='FromTokenContractAddress' placeholder='FromTokenContractAddress' value='0xc778417e063141139fce010982780140aa0cd5ab' />
                     </div>
                     <div>
-                    <input type='text' id='pairAddress' placeholder='pairAddress' value='0x84F395c5d3102541D78EB9F04bB29552426D8Fda' />
+                    <input type='text' id='pairAddress' placeholder='pairAddress' value='0x4A6a2F8c7b5F3e756868bc9AA24693aDb17f710f' />
                     </div>
                     <div>
                     <input type='text' id='amount' placeholder='amount' value='1000000000000000' />
@@ -105,10 +105,10 @@ function App() {
                     <input type='text' id='minPoolTokens' placeholder='minPoolTokens' value='1262872576' />
                     </div>
                     <div>
-                    <input type='text' id='allowanceTarget' placeholder='allowanceTarget' value='0x4eacd0af335451709e1e7b570b8ea68edec8bc97' />
+                    <input type='text' id='allowanceTarget' placeholder='allowanceTarget' value='0xfb2dd2a1366de37f7241c83d47da58fd503e2c64' />
                     </div>
                     <div>
-                    <input type='text' id='swapTarget' placeholder='swapTarget' value='0x4eacd0af335451709e1e7b570b8ea68edec8bc97' />
+                    <input type='text' id='swapTarget' placeholder='swapTarget' value='0xfb2dd2a1366de37f7241c83d47da58fd503e2c64' />
                     </div>
                 </div>
 

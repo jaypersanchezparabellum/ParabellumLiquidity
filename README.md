@@ -32,6 +32,15 @@ This is Antebellum's Liquidity Pool Smart Contract
 | ChainLink         |   0x8430d9d114652c6434af3ec9148af35bbbd21158                  |   Last transaction 3 days ago |
 
 
+### Ropsten
+
+|   Contract Name   |   Address |   Notes                                       |
+|-----------------------------------|-----------------------------------------------| |
+|   Parabellum_In_General_V3_0_1         |   0x2F205936E03B9B11D9E6c78D5A8Bbc3a31461C1c  |   |
+|    Parabellum_In_General_V3_0_1                                   | 0x8B5BE234D39425620216145169c866e335F20794    | Deployed from Remix   |
+| USDT Tether Token               | 0x4A6a2F8c7b5F3e756868bc9AA24693aDb17f710f    | forked from this site https://forum.makerdao.com/t/usdt-erc20-token-smart-contract-technical-assessment/3462 |
+
+
 
   
 

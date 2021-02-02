@@ -60179,6 +60179,30 @@
     "version": "0.5.7+commit.6da8b019.Emscripten.clang"
   },
   "networks": {
+    "3": {
+      "events": {
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x2F205936E03B9B11D9E6c78D5A8Bbc3a31461C1c",
+      "transactionHash": "0x654d6d396ff766e8f86db9d38d5ba19844fd906dedbde29c4363e265460fc5a3"
+    },
     "42": {
       "events": {
         "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
@@ -60205,8 +60229,7 @@
     }
   },
   "schemaVersion": "3.3.3",
-  "updatedAt": "2021-02-02T01:23:09.198Z",
-  "networkType": "ethereum",
+  "updatedAt": "2021-02-02T02:00:50.636Z",
   "devdoc": {
     "methods": {
       "ZapIn(address,address,uint256,uint256,address,address,bytes)": {
