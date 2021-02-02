@@ -19,10 +19,10 @@ This is Antebellum's Liquidity Pool Smart Contract
 
 ### Kovan
 
-|   Contract Name   |   Address |   Notes                                       |
-|-----------------------------------|-----------------------------------------------| |
+|   Contract Name   |   Address |   Notes    |                                   
+|-------------------|-----------|----------- |
 | Parabellum_In_General_V3_0_1    |   0x7eA3bf259208eb2Db3623b55DCC4F964D23B5BA0  | |
-|                   Parabellum_In_General_V3_0_1              | 0xDfE8Ad69E9cF0E136c5f07332AaC7ac93d44BFA9  | Verified in Kovan Etherescan |
+| Parabellum_In_General_V3_0_1    | 0xDfE8Ad69E9cF0E136c5f07332AaC7ac93d44BFA9  | Verified in Kovan Etherescan |
 | Parabellum_In_General_V3_0_1  |   0x584bDD9da8734C4780D63843e8D87070c0D06027  |   3rd deploy  |
 | USDT Tether Token               | 0x84F395c5d3102541D78EB9F04bB29552426D8Fda    | forked from this site https://forum.makerdao.com/t/usdt-erc20-token-smart-contract-technical-assessment/3462 |
 | USDT Token        | 0xe4ed9de7c8ccab8cfd2a5e88c209bd6cdb9c86ad                    |   |
@@ -34,8 +34,8 @@ This is Antebellum's Liquidity Pool Smart Contract
 
 ### Ropsten
 
-|   Contract Name   |   Address |   Notes                                       |
-|-----------------------------------|-----------------------------------------------| |
+|   Contract Name   |   Address |   Notes |
+|-------------------|-----------|-------- |
 |   Parabellum_In_General_V3_0_1         |   0x2F205936E03B9B11D9E6c78D5A8Bbc3a31461C1c  |  verified |
 |    Parabellum_In_General_V3_0_1                                   | 0x8B5BE234D39425620216145169c866e335F20794    | Deployed from Remix and verified   |
 |   Parabellum_In_General_V3_0_1 | 0x4365E89B60B08595c49b0F94106C9c773750Da37  |   deployed by Bob |
