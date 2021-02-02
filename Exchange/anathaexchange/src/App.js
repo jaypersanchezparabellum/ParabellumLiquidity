@@ -1,7 +1,7 @@
 import './App.css';
 import erc20contractJSON from './data/ERC20.json';
 import parabellumcontractJSON from './data/Parabellum_In_General_V3_0_1.json';
-import React from 'react'
+import React, { useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import Web3 from 'web3';
@@ -9,6 +9,7 @@ import Web3 from 'web3';
 let web3 = new Web3(window.ethereum);
 //web3.eth.getAccounts().then(console.log);
     
+
 function addToPool() {
   //alert(`addToPool`)
   const web3 = new Web3(Web3.currentProvider || "https://mainnet.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257")
@@ -48,18 +49,18 @@ function parabellumAdd() {
   window.ethereum.enable()
   .then(() => {
     window.web3.eth.sendTransaction({
-                    from: '0xB5A7b7658c8daA57AE9F538C0315d4fa44Fe0bE4',
-                    to: '0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc',
+                    from: '0x67C30288c1F30756AbEE69A12e13532111DDE404',
+                    to: '0x84F395c5d3102541D78EB9F04bB29552426D8Fda',
                     value:1000000000000000,
                     gasPrice:68000000,
                     gasLimit:1000000,
                     data: parabellumContract.methods.ZapIn(
-                      '0x0000000000000000000000000000000000000000',
-                      '0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc',
+                      '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+                      '0x84F395c5d3102541D78EB9F04bB29552426D8Fda',
                       1000000000000000,
                       1262872576,
-                      '0xDef1C0ded9bec7F1a1670819833240f027b25EfF',
-                      '0xDef1C0ded9bec7F1a1670819833240f027b25EfF',
+                      '0x4eacd0af335451709e1e7b570b8ea68edec8bc97',
+                      '0x4eacd0af335451709e1e7b570b8ea68edec8bc97',
                       '0X0'
                     ).encodeABI()
     })
@@ -67,6 +68,14 @@ function parabellumAdd() {
 }
 
 function App() {
+
+  const [FromTokenContractAddress, setFromTokenContractAddress] = useState(process.env.ETH_CONTRACT_ADDRESS);
+  const [pairAddress, setpairAddress] = useState(process.env.KOVAN_USDT_Tether_Token);
+  const [amount, setamount] = useState(1000000000000000);
+  const [minPoolTokens, setminPoolTokens] = useState(1262872576);
+  const [allowanceTarget, setallowanceTarget] = useState(process.env.KOVAN_OX_EXCHANGE_CONTRACT_ADDRESS);
+  const [swapTarget, setswapTarget] = useState(process.env.KOVAN_OX_EXCHANGE_CONTRACT_ADDRESS);
+  const [swapData, setswapData] = useState();
  
   if (typeof web3 !== 'undefined') {
     web3 = new Web3(web3.currentProvider);
@@ -84,10 +93,10 @@ function App() {
                     <input type='text' id='ethamount' placeholder='ETH Amount' value='0.001' />
                     </div>
                     <div>
-                    <input type='text' id='FromTokenContractAddress' placeholder='FromTokenContractAddress' value='0x0000000000000000000000000000000000000000' />
+                    <input type='text' id='FromTokenContractAddress' placeholder='FromTokenContractAddress' value='0xd0a1e359811322d97991e03f863a0c30c2cf029c' />
                     </div>
                     <div>
-                    <input type='text' id='pairAddress' placeholder='pairAddress' value='0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc' />
+                    <input type='text' id='pairAddress' placeholder='pairAddress' value='0x84F395c5d3102541D78EB9F04bB29552426D8Fda' />
                     </div>
                     <div>
                     <input type='text' id='amount' placeholder='amount' value='1000000000000000' />
@@ -96,10 +105,10 @@ function App() {
                     <input type='text' id='minPoolTokens' placeholder='minPoolTokens' value='1262872576' />
                     </div>
                     <div>
-                    <input type='text' id='allowanceTarget' placeholder='allowanceTarget' value='0xDef1C0ded9bec7F1a1670819833240f027b25EfF' />
+                    <input type='text' id='allowanceTarget' placeholder='allowanceTarget' value='0x4eacd0af335451709e1e7b570b8ea68edec8bc97' />
                     </div>
                     <div>
-                    <input type='text' id='swapTarget' placeholder='swapTarget' value='0xDef1C0ded9bec7F1a1670819833240f027b25EfF' />
+                    <input type='text' id='swapTarget' placeholder='swapTarget' value='0x4eacd0af335451709e1e7b570b8ea68edec8bc97' />
                     </div>
                 </div>
 

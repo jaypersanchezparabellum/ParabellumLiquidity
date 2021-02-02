@@ -12,6 +12,7 @@ const parabellumAddress = process.env.ZAPIN_MAINNET;
 const parabellumContract = new web3.eth.Contract(parabellumABI, parabellumAddress);
 
 
+
 async function addToLiquidSigned(_swapData) {
     //console.log(`PARAMS :: ${ZapInData.FromTokenContractAddress} :: ${ZapInData.pairAddress} :: ${ZapInData.amount} 
       //                  :: ${ZapInData.minPoolTokens} :: ${ZapInData.allowanceTarget} :: ${ZapInData.swapTarget} :: ${_swapData}`)
@@ -92,7 +93,7 @@ function calculateSlippage() {}
 //Liquidity pool payload data
 const ZapInData = {
     FromTokenContractAddress : process.env.ETH_CONTRACT_ADDRESS,
-    pairAddress : process.env.KOVAN_CHAINLINK,
+    pairAddress : process.env.KOVAN_USDT_Tether_Token,
     amount: new BigNumber(1000000000000000), //0.001 ETH
     minPoolTokens : 1262872576,
     allowanceTarget : process.env.KOVAN_OX_EXCHANGE_CONTRACT_ADDRESS,

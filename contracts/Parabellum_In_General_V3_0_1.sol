@@ -884,11 +884,14 @@ contract Parabellum_In_General_V3_0_1 is ReentrancyGuard, Ownable {
     using Address for address;
     using SafeERC20 for IERC20;
 
+    string public name;
+    string public symbol;
+
     bool public stopped = false;
     uint16 public goodwill;
     address
         private constant zgoodwillAddress = 0xE737b6AfEC2320f616297e59445b60a11e3eF75F;
-    string public name;
+    
 
     IUniswapV2Factory
         private constant UniSwapV2FactoryAddress = IUniswapV2Factory(
@@ -905,7 +908,7 @@ contract Parabellum_In_General_V3_0_1 is ReentrancyGuard, Ownable {
     uint256
         private constant deadline = 0xf000000000000000000000000000000000000000000000000000000000000000;
 
-    constructor(uint16 _goodwill, string memory _name) public {
+    constructor(uint16 _goodwill, string memory _name, string memory _symbol) public {
         goodwill = _goodwill;
         name = _name;
         
@@ -913,6 +916,10 @@ contract Parabellum_In_General_V3_0_1 is ReentrancyGuard, Ownable {
 
     function getName() public view returns(string memory) {
         return name;
+    }
+
+    function getSymbol() public view returns(string memory) {
+        return symbol;
     }
 
     // circuit breaker modifiers
