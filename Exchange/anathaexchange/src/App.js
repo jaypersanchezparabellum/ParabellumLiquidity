@@ -20,17 +20,7 @@ function addToPool() {
     
 }
 
-function transferToken() {
-  window.web3 = new Web3(Web3.givenProvider || "https://ropsten.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257");
-  window.ethereum.enable()
-  .then(() => {
-    window.web3.eth.sendTransaction({
-      from: '0xB5A7b7658c8daA57AE9F538C0315d4fa44Fe0bE4',
-      to: '0xab48918a1E997A43423b19B9Cc50f59a251bF0f3',
-      value: 1000000000000000 //0.001
-    })
-  })
-}
+
 
 
 
@@ -47,6 +37,7 @@ function App() {
   const [httpprovider, sethttpprovider] = useState("https://ropsten.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257")
   const [txreceipt, settxreceipt] = useState();
   
+  
  
   if (typeof web3 !== 'undefined') {
     web3 = new Web3(web3.currentProvider);
@@ -55,12 +46,35 @@ function App() {
     web3 = new Web3(new Web3.providers.HttpProvider(httpprovider));
   }
 
+  function transferToken() {
+    window.web3 = new Web3(Web3.givenProvider || "https://ropsten.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257");
+    window.ethereum.enable()
+    .then(() => {
+      window.web3.eth.sendTransaction({
+        from: '0x923359F72080CFE2647711eD7BCb8fC25E938B7e',
+        to: '0xd28A12D75D552b2FAc46f4Ea37FE2575AA91dEa7',
+        value: 1000000000000000 //0.001
+      })
+    })
+  }
+
   function parabellumAdd() {
-    const parabellumAddress = process.env.ZAPIN_MAINNET;
+    window.ethereum.enable()
+    const parabellumAddress = '0x4365E89B60B08595c49b0F94106C9c773750Da37';
     const parabellumContract = new web3.eth.Contract(parabellumcontractJSON, '0x4365E89B60B08595c49b0F94106C9c773750Da37');
     window.web3 = new Web3(Web3.givenProvider || "https://ropsten.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257");
     //https://ropsten.api.0x.org/swap/v1/quote?sellToken=0xc778417e063141139fce010982780140aa0cd5ab&buyToken=0x4A6a2F8c7b5F3e756868bc9AA24693aDb17f710f&buyAmount=1000000000000000
-    const URL = `https://ropsten.api.0x.org/swap/v1/quote?sellToken=ETH&buyToken=USDC&buyAmount=1000000000000000`;
+    //const URL = `https://ropsten.api.0x.org/swap/v1/quote?sellToken=ETH&buyToken=USDC&buyAmount=1000000000000000`;
+    const URL = `https://api.0x.org/swap/v1/quote?sellToken=0x0000000000000000000000000000000000000000&buyToken=0xdac17f958d2ee523a2206206994597c13d831ec7&buyAmount=1000000000000000`;
+    let coinbase;
+
+    /* DEBUG */
+    web3.eth.getAccounts((error, accounts) => {
+      coinbase = accounts[0]
+      console.log(coinbase)
+    })
+    //console.log(FromTokenContractAddress)
+    /********/
   
     fetch(URL, { method:"GET",headers:{Accept:'application/json','Content-Type':'applicaiton/json'} })
     .then((response) => 
@@ -76,18 +90,18 @@ function App() {
       console.log(swapData)
       window.ethereum.enable();
       window.web3.eth.sendTransaction({
-        from: {FromTokenContractAddress},
-        to: {pairAddress},
-        value:{amount},
+        from: coinbase,
+        to: pairAddress,
+        value:amount,
         gasPrice:68000000,
         gasLimit:1000000,
         data: parabellumContract.methods.ZapIn(
-          {FromTokenContractAddress},
-          {pairAddress},
-          {amount},
-          {minPoolTokens},
-          {allowanceTarget},
-          {swapTarget},
+          FromTokenContractAddress,
+          pairAddress,
+          amount,
+          minPoolTokens,
+          allowanceTarget,
+          swapTarget,
           swapData
         ).encodeABI()
       })
@@ -115,22 +129,22 @@ function App() {
                     <input type='text' id='ethamount' placeholder='ETH Amount' value='0.001' />
                     </div>
                     <div>
-                    <input type='text' id='FromTokenContractAddress' placeholder='FromTokenContractAddress' value='0xc778417e063141139fce010982780140aa0cd5ab' />
+                    <input type='text' id='FromTokenContractAddress' placeholder='FromTokenContractAddress' value={FromTokenContractAddress} />
                     </div>
                     <div>
-                    <input type='text' id='pairAddress' placeholder='pairAddress' value='0x4A6a2F8c7b5F3e756868bc9AA24693aDb17f710f' />
+                    <input type='text' id='pairAddress' placeholder='pairAddress' value={pairAddress} />
                     </div>
                     <div>
-                    <input type='text' id='amount' placeholder='amount' value='1000000000000000' />
+                    <input type='text' id='amount' placeholder='amount' value={amount} />
                     </div>
                     <div>
-                    <input type='text' id='minPoolTokens' placeholder='minPoolTokens' value='1262872576' />
+                    <input type='text' id='minPoolTokens' placeholder='minPoolTokens' value={minPoolTokens} />
                     </div>
                     <div>
-                    <input type='text' id='allowanceTarget' placeholder='allowanceTarget' value='0xfb2dd2a1366de37f7241c83d47da58fd503e2c64' />
+                    <input type='text' id='allowanceTarget' placeholder='allowanceTarget' value={allowanceTarget} />
                     </div>
                     <div>
-                    <input type='text' id='swapTarget' placeholder='swapTarget' value='0xfb2dd2a1366de37f7241c83d47da58fd503e2c64' />
+                    <input type='text' id='swapTarget' placeholder='swapTarget' value={swapTarget} />
                     </div>
                 </div>
 
