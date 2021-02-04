@@ -39,6 +39,8 @@ function App() {
   const [swapTarget, setswapTarget] = useState('0xdef1c0ded9bec7f1a1670819833240f027b25eff');
   const [swapData, setswapData] = useState();
   const [httpprovider, sethttpprovider] = useState("https://ropsten.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257")
+  const [selltk, setselltk] =  useState('WETH');
+  const [buytk, setbuytk] = useState('USDC');
   
   
  
@@ -61,12 +63,20 @@ function App() {
     })
   }
 
+  function handleselltk(value) {
+    setselltk(value)
+  }
+
+  function hadlebuytk(value) {
+    setbuytk(value)
+  }
+
   function parabellumAdd() {
     window.ethereum.enable()
     const parabellumAddress = '0xD3cF4e98e1e432B3d6Ae42AE406A78F2AC8293D0';
     const parabellumContract = new web3.eth.Contract(parabellumcontractJSON, parabellumAddress);
     window.web3 = new Web3(Web3.givenProvider || "https://mainnet.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257");
-    const URL = `https://api.0x.org/swap/v1/quote?sellToken=WETH&buyToken=USDC&buyAmount=100000000000000`;
+    const URL = `https://api.0x.org/swap/v1/quote?sellToken=${selltk}&buyToken=${buytk}&buyAmount=100000000000000`;
     let coinbase;
 
     /* DEBUG */
@@ -155,6 +165,18 @@ function App() {
                 </div>
 
                 <button id="addliquidity" onClick={parabellumAdd}>Add To Pool</button>  
+
+                <div>
+                    <div>
+                      <label>Setup Sell Token and Buy Token</label>
+                    </div>
+                    <div>
+                    <input type='text' id='_selltoken' placeholder='ETH or WETH' value={selltk} onChange={(e)=>{setselltk(e.target.value)}} />
+                    </div>
+                    <div>
+                    <input type='text' id='_buytoken' placeholder='USDC or USDT' value={buytk} onChange={(e)=>{setbuytk(e.target.value)}} />
+                    </div>
+                </div>
     </div>
   );
 }
