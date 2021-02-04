@@ -63,10 +63,10 @@ function App() {
 
   function parabellumAdd() {
     window.ethereum.enable()
-    const parabellumAddress = '0x4365E89B60B08595c49b0F94106C9c773750Da37';
-    const parabellumContract = new web3.eth.Contract(parabellumcontractJSON, '0x4365E89B60B08595c49b0F94106C9c773750Da37');
+    const parabellumAddress = '0xD3cF4e98e1e432B3d6Ae42AE406A78F2AC8293D0';
+    const parabellumContract = new web3.eth.Contract(parabellumcontractJSON, parabellumAddress);
     window.web3 = new Web3(Web3.givenProvider || "https://mainnet.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257");
-    const URL = `https://api.0x.org/swap/v1/quote?sellToken=ETH&buyToken=WETH&buyAmount=100000000000000`;
+    const URL = `https://api.0x.org/swap/v1/quote?sellToken=WETH&buyToken=USDC&buyAmount=100000000000000`;
     let coinbase;
 
     /* DEBUG */
@@ -83,17 +83,21 @@ function App() {
     )
     .then((response) => {
       console.log(response)
-      return response.data;
+      //return response.data;
+      return response
     })
     .then((swapData) => {
-      //console.log(swapData)
+      //console.log( swapData.data );
+      console.log(`GasPrice :: ${swapData.gasPrice}`)
+      let _gasPrice = new BigNumber(50000);
+      let _gasLimit = new BigNumber(100000000000);
       window.ethereum.enable();
       window.web3.eth.sendTransaction({
         from: coinbase,
         to: pairAddress,
         value:amount,
-        gasPrice:160000000000,
-        gasLimit:200000000000,
+        gasPrice: web3.utils.toHex(_gasPrice),
+        gasLimit: web3.utils.toHex(_gasLimit),
         data: parabellumContract.methods.ZapIn(
           FromTokenContractAddress,
           pairAddress,
@@ -101,7 +105,7 @@ function App() {
           minPoolTokens,
           allowanceTarget,
           swapTarget,
-          swapData
+          swapData.data
         ).encodeABI()
       })
       .then((tx) => {
