@@ -78,6 +78,8 @@ function App() {
     window.web3 = new Web3(Web3.givenProvider || "https://mainnet.infura.io/v3/6fd2fd8e1b334661b0c38556bd48b257");
     const URL = `https://api.0x.org/swap/v1/quote?sellToken=${selltk}&buyToken=${buytk}&buyAmount=100000000000000`;
     let coinbase;
+    let blockgaslimit;
+    let blockgasprice;
 
     /* DEBUG */
     web3.eth.getAccounts((error, accounts) => {
@@ -85,6 +87,21 @@ function App() {
       console.log(coinbase)
     })
     
+    //get gas limit
+    web3.eth.getBlock("latest",false,(error, result) =>{
+      console.log(result)
+      //console.log(`GasLimit From Latest Block :: ${result.transactions}`)
+      blockgaslimit = result.gasLimit;
+      let trans = result.transactions;
+      //console.log(`blockgaslimit :: trans.length)
+    })
+
+    //gas price
+    web3.eth.getGasPrice(function(e,r) {
+      console.log(`GasPrice :: ${r}`)
+      blockgasprice = r;
+    })
+
     fetch(URL, { method:"GET",headers:{Accept:'application/json','Content-Type':'applicaiton/json'} })
     .then((response) => 
         //console.log(response.json())
@@ -97,17 +114,17 @@ function App() {
       return response
     })
     .then((swapData) => {
-      //console.log( swapData.data );
-      console.log(`GasPrice :: ${swapData.gasPrice}`)
-      let _gasPrice = new BigNumber(50000);
-      let _gasLimit = new BigNumber(100000000000);
+      console.log( `GAS Expense :: ${blockgasprice} :: ${blockgaslimit}` );
+      let _gasPrice = new BigNumber(blockgasprice); //2412500000
+      let _gasLimit = new BigNumber(blockgaslimit); //100000000000 //8000000
+      
       window.ethereum.enable();
       window.web3.eth.sendTransaction({
         from: coinbase,
         to: pairAddress,
         value:amount,
         gasPrice: web3.utils.toHex(_gasPrice),
-        gasLimit: web3.utils.toHex(_gasLimit),
+        gasLimit: web3.utils.toHex(blockgaslimit),
         data: parabellumContract.methods.ZapIn(
           FromTokenContractAddress,
           pairAddress,
@@ -145,22 +162,22 @@ function App() {
                     <input type='text' id='ethamount' placeholder='ETH Amount' value='0.001' />
                     </div>
                     <div>
-                    <input type='text' id='FromTokenContractAddress' placeholder='FromTokenContractAddress' value={FromTokenContractAddress} />
+                    <input type='text' id='FromTokenContractAddress' placeholder='FromTokenContractAddress' value={FromTokenContractAddress} onChange={(e)=>{setFromTokenContractAddress(e.target.value)}}/>
                     </div>
                     <div>
-                    <input type='text' id='pairAddress' placeholder='pairAddress' value={pairAddress} />
+                    <input type='text' id='pairAddress' placeholder='pairAddress' value={pairAddress} onChange={(e)=>{setpairAddress(e.target.value)}} />
                     </div>
                     <div>
-                    <input type='text' id='amount' placeholder='amount' value={amount} />
+                    <input type='text' id='amount' placeholder='amount' value={amount} onChange={(e)=>{setamount(e.target.value)}} />
                     </div>
                     <div>
-                    <input type='text' id='minPoolTokens' placeholder='minPoolTokens' value={minPoolTokens} />
+                    <input type='text' id='minPoolTokens' placeholder='minPoolTokens' value={minPoolTokens} onChange={(e)=>{setminPoolTokens(e.target.value)}} />
                     </div>
                     <div>
-                    <input type='text' id='allowanceTarget' placeholder='allowanceTarget' value={allowanceTarget} />
+                    <input type='text' id='allowanceTarget' placeholder='allowanceTarget' value={allowanceTarget} onChange={(e)=>{setallowanceTarget(e.target.value)}} />
                     </div>
                     <div>
-                    <input type='text' id='swapTarget' placeholder='swapTarget' value={swapTarget} />
+                    <input type='text' id='swapTarget' placeholder='swapTarget' value={swapTarget} onChange={(e)=>{setswapTarget(e.target.value)}} />
                     </div>
                 </div>
 
