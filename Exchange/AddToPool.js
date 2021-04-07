@@ -1,5 +1,5 @@
 // javascript:  transact with deployed Uniswap exchange contract
-
+const pzapinabi = require('./Parabellum_In_V1')
 const Tx = require('ethereumjs-tx')
 var Web3 = require('web3');
 var fs = require('fs')
@@ -12,15 +12,16 @@ const erc20ABI = JSON.parse(erc20contractJSON);
 const parabellumABI = JSON.parse(parabellumcontractJSON)
 
 
-//let web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/"));
-// the address that will send the test transaction
-const addressFrom = '0x0e364eb0ad6eb5a4fc30fc3d2c2ae8ebe75f245c'
+const addressFrom = '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1'
 const exchange_addr = '0x416F1Ac032D1eEE743b18296aB958743B1E61E81'
-const privKey = process.env.privateKey
+const privKey = '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d'
 // the exchange contract address
 const addressTo = '0xCC4d8eCFa6a5c1a84853EC5c0c08Cc54Cb177a6A'
+
+console.log(pzapinabi)
+
 const contract = new web3.eth.Contract(
-  JSON.parse(abi),
+  parabellumABI,
   addressTo
 );
 const TOKEN_ADDED = web3.utils.toHex(100*10**18) 
